@@ -234,30 +234,30 @@
     <script>
         function previewFile(input) {
             var file = $("input[type=file]").get(0).files[0];
-
+            var reader = new FileReader();
             if (file) {
-                var reader = new FileReader();
-
-                reader.onload = function() {
+            //  preview image 
+                reader.onload = function() {   
                     $("#image").attr("src", reader.result);
+                    
                 }
-
+            // finish onload send dataURL
                 reader.readAsDataURL(file);
             }
         }
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js "></script>
     <script>
-        $(document).ready(
-            function() {
-                $('input:file,ID_Text').change(
-                    function() {
-                        if ($(this).val()) {
-                            $('input:submit').attr('disabled', false);
-                        }
-                    }
-                );
-            });
+        // $(document).ready(
+        //     function() {
+        //         $('input:file,ID_Text').change(
+        //             function() {
+        //                 if ($(this).val()) {
+        //                     $('input:submit').attr('disabled', false);
+        //                 }
+        //             }
+        //         );
+        //     });
     </script>
     <form name="myform" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
@@ -271,7 +271,7 @@
                         <!-- รหัสพนักงาน -->
                         <div class="container" style="margin-top: 5%;">
                             <h5>กรอกรหัสพนักงานเพื่อส่งรูปภาพลุ้นรางวัล</h5>
-                            <input id="partname" type="ID_Text" name="Partner" placeholder="กรุณากรอกรหัสพนักงาน" checked>
+                            <input id="partname" type="text" name="Partner" minlength="6" maxlength="7" onkeypress="return onlyNumberKey(event)" placeholder="กรุณากรอกรหัสพนักงาน" required>
                         </div>
                         <!-- upload file-->
                         <div class="jumbotron jumbotron-fluid " id="jub">
@@ -283,7 +283,7 @@
                                         <div class="container-fluid-1">
 
                                             <div class="container-image-alige">
-                                                <img id="image" src="\static\image\12.png" alt="Placeholder" style="width:50%; "  class="rounded mx-auto d-block">
+                                                <img id="image" src="\static\image\12.png" alt="Your Image" style="width:50%; "  class="rounded mx-auto d-block">
                                                 <h5 id="jpg-png">.jpeg ,.png (ขนาดไฟล์ 4 MB)</h5>
                                             </div>
 
@@ -291,14 +291,10 @@
                                                 <label for="file-input" style="margin-left: 25%;">
                                                   <img src="{% static 'image/Btn.png' %}" >
                                                 </label>
-                                              
-                                                <input type="file" name="image" id="file-input" onchange="previewFile(this);" required id="previewImg" accept="image/*" />
+                                                
+                                                <input type="file" name="image" id="file-input" onchange="previewFile(this);"  accept="image/*" required/>
                                               </div>
 
-                                           
-                                            <!-- <input type="file" name="image" id="file-input" onchange="previewFile(this);" required id="previewImg" accept="image/*" /> -->
-
-                                    
 
                                             <label class="custom-file-label"></label>
 
@@ -340,15 +336,15 @@
                                  </script>
                              <div id="container"></div>
                             
-                                <select name="subject" id="subject"  style="margin-bottom:5%; margin-left: 5%; "  value="subject" ></select>
+                                <select name="subject" id="subject"  style="margin-bottom:5%; margin-left: 5%; "  value="subject" required></select>
                             <br>
 
                             <h5 style=" margin-left: 5%; "> ชนิดอุปกรณ์</h5>
-                            <select name="topic" id="topic" style="margin-bottom:5%; margin-left: 5%;" value="topict" ></select>
+                            <select name="topic" id="topic" style="margin-bottom:5%; margin-left: 5%;" value="topict" required></select>
                             <br>
 
                             <h5 style=" margin-left: 5%; margin-left: 5%;"> สภาพอุปกรณ์ (เลือกได้หลายรายการ)</h5>
-                            <select multiple="multiple" class="multiple-select" value="chaptert"  name="chapter[]" id="chapter" placeholder="เลือกสภาพอุปกรณ์" ></select>
+                            <select multiple="multiple" class="multiple-select" value="chaptert"  name="chapter[]" id="chapter" placeholder="เลือกสภาพอุปกรณ์" required></select>
                         <style>
                             .multiple-select{
                                 margin-left: 5%;
@@ -377,11 +373,11 @@
                     <div class="container" style="margin-top: 10%; margin-bottom: 5%;">
                         <div class="row">
                           <div class="col">
-                            <a href="/home">  <input id="btn_submit_B" type="link"  value="ย้อนกลับ" disabled> </a>
+                            <a href="/home">  <input id="btn_submit_B" type="link"  value="ย้อนกลับ" > </a>
 
                           </div>
                           <div class="col">
-                            <a href="/complete">   <input id="btn_submit_S" type="submit"  value="ส่งข้อมูล" disabled> </a>
+                            <a href="/complete">   <input id="btn_submit_S" type="submit"  value="ส่งข้อมูล"> </a>
 
                           </div>
                           
@@ -396,45 +392,55 @@
     </form>
      <!-- #เช็คเลือกแรงดัน อุปกรณ์ ชนิด สาเหตุ บังคับเลือก -->
      <script>
-        function submit() {
-            var Voltage = document.getElementsByName("Voltage");
-            var found = 1;
-            for (var i = 0; i < Voltage.length; i++) {
-                if (Voltage[i].checked) {
-                    console.log(Voltage[i].value);
+        // function submit() {
+        //     var Voltage = document.getElementsByName("Voltage");
+        //     var found = 1;
+        //     for (var i = 0; i < Voltage.length; i++) {
+        //         if (Voltage[i].checked) {
+        //             console.log(Voltage[i].value);
 
-                    found = 0;
-                    break;
-                }
-            }
-            if (found == 1) {
-                alert("กรุณาเลือกระดับแรงดัน");
-            }
-            var ddlFruits = document.getElementById("subject");
-            if (ddlFruits.value == "subject ") {
-                //If the "Please Select" option is selected display error.
-                alert("กรุณาเลือกอุปกรณ์");
-            }
-
-
-            var ddlFruits2 = document.getElementById("topic");
-            if (ddlFruits2.value == "topic ") {
-                //If the "Please Select" option is selected display error.
-                alert("กรุณาเลือกชนิดอุปกรณ์");
-
-            }
+        //             found = 0;
+        //             break;
+        //         }
+        //     }
+        //     if (found == 1) {
+        //         alert("กรุณาเลือกระดับแรงดัน");
+        //     }
+        //     var ddlFruits = document.getElementById("subject");
+        //     if (ddlFruits.value == "subject ") {
+        //         //If the "Please Select" option is selected display error.
+        //         alert("กรุณาเลือกอุปกรณ์");
+        //     }
 
 
-            var ddlFruits3 = document.getElementById("chapter");
-            if (ddlFruits3.value == "chapter ") {
-                //If the "Please Select" option is selected display error.
-                alert("กรุณาเลือกสาเหตุชำรุด");
+        //     var ddlFruits2 = document.getElementById("topic");
+        //     if (ddlFruits2.value == "topic ") {
+        //         //If the "Please Select" option is selected display error.
+        //         alert("กรุณาเลือกชนิดอุปกรณ์");
 
-            }
+        //     }
 
-        }
+
+        //     var ddlFruits3 = document.getElementById("chapter");
+        //     if (ddlFruits3.value == "chapter ") {
+        //         //If the "Please Select" option is selected display error.
+        //         alert("กรุณาเลือกสาเหตุชำรุด");
+
+        //     }
+
+        // }
     </script>
-    
+        <!-- #กรอกเฉพาะตัวเลข -->
+        <script>
+        function onlyNumberKey(evt) {
+          
+          // Only ASCII character in that range allowed
+          var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+          if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+              return false;
+          return true;
+        }
+        </script>
 
         <script id="myscript">
             var typeData = ["115KV", "33KV", "22KV"];
@@ -697,7 +703,7 @@
                 for (var i = 0; i < typeData.length; i++ ) {
                     $(".radio_box").append(
                         `<label><br> 
-                    <input type="radio" class="dataBox" name="typeDataBox" value="`+ typeData[i]+`"</input>
+                    <input type="radio" class="dataBox" name="typeDataBox" value="`+ typeData[i]+`" required></input>
                     ` + typeData[i]+`</label><br>`
                     )
                 }
