@@ -1,1 +1,1 @@
-web: gunicorn aidea2021.wsgi --log-file-
+web: gunicorn aidea2021.wsgi 
